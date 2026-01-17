@@ -55,3 +55,10 @@ None yet.
 Last session: 2026-01-17
 Stopped at: Project initialization complete
 Resume file: None
+
+## GitHub Integration
+
+Repository: https://github.com/WallyWithCode/gsd-Dashcast
+Remote: origin (master branch)
+Sync Strategy: Phase-based commits with immediate pushes
+Last sync: 2026-01-17 - Repository established
