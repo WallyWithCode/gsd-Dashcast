@@ -10,6 +10,10 @@ A Dockerized webhook service that receives RTSP stream URLs via webhook payload 
 - 🔒 **Optional webhook authentication** - Secret key protection for webhooks
 - 📊 **Health monitoring** - Built-in health checks and device discovery
 - 🌐 **RTSP/RTMP/HTTP support** - Multiple stream protocol compatibility
+- 🔄 **Automatic stream conversion** - RTSP to HLS/DASH conversion for Cast compatibility
+- 🎬 **FFmpeg-powered processing** - Professional-grade stream transcoding
+- 📡 **Local HTTP serving** - Automatic local server for processed streams
+- 🧹 **Resource cleanup** - Automatic cleanup of expired streams and segments
 
 ## Quick Start
 
@@ -102,6 +106,21 @@ curl -X POST http://localhost:8080/cast/Living%20Room%20TV \
 | `CAST_TIMEOUT` | 30 | Seconds to wait for streaming confirmation |
 | `LOG_LEVEL` | INFO | Logging level (DEBUG, INFO, WARNING, ERROR) |
 
+### Stream Processing
+
+The service automatically converts RTSP streams to Cast-compatible formats:
+
+- **HLS (HTTP Live Streaming)**: Primary format for Cast compatibility
+- **DASH (Dynamic Adaptive Streaming)**: Fallback format for HLS
+- **Local HTTP Server**: Automatically serves processed segments
+- **Automatic Cleanup**: Removes expired streams after 1 hour
+
+### Supported Stream Formats
+
+- **RTSP**: Real-Time Streaming Protocol (IP cameras, surveillance)
+- **RTMP**: Real Messaging Protocol (live streaming)
+- **HTTP/HTTPS**: Direct video file URLs
+
 ### Device Configuration
 
 Devices are automatically discovered on your local network. If you need to specify static IP addresses, edit `config/devices.conf`:
@@ -117,17 +136,23 @@ Devices are automatically discovered on your local network. If you need to speci
 |--------|----------|-------------|
 | GET | `/health` | Service health check |
 | GET | `/devices` | List all discovered Cast devices |
-| POST | `/cast/<device_name>` | Cast stream to specific device |
+| POST | `/cast/<device_name>` | Cast RTSP stream to specific device |
 | POST | `/webhook/<device_name>` | Alias for `/cast/<device_name>` |
+| GET | `/streams` | List all active RTSP streams |
+| DELETE | `/streams/<stream_id>` | Clean up specific stream |
+| POST | `/cleanup` | Clean up old streams |
 
 ## How It Works
 
 1. **Webhook Reception**: Receives RTSP URL via POST request
-2. **Device Discovery**: Automatically discovers Cast devices on network
-3. **Stream Validation**: Validates RTSP/RTMP/HTTP URL format
-4. **Casting**: Connects to Cast device and starts stream
-5. **Confirmation**: Waits and verifies video is actively streaming
-6. **Response**: Returns success only after streaming confirmation
+2. **Stream Validation**: Tests RTSP connectivity and validates format
+3. **Stream Processing**: Converts RTSP to Cast-compatible HLS/DASH format using FFmpeg
+4. **Local Serving**: Creates HTTP server to serve processed segments locally
+5. **Device Discovery**: Automatically discovers Cast devices on network
+6. **Casting**: Connects to Cast device and starts processed stream
+7. **Confirmation**: Waits and verifies video is actively streaming
+8. **Response**: Returns success only after streaming confirmation
+9. **Cleanup**: Automatically cleans up expired streams and temporary files
 
 ## Security
 

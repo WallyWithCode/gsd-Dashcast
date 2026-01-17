@@ -5,3 +5,6 @@ pychromecast==13.0.4
 zeroconf==0.112.0
 python-dotenv==1.0.0
 gunicorn==21.2.0
+
+# RTSP and stream processing
+ffmpeg-python==0.2.0
